@@ -38,14 +38,15 @@
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
-        "lint": "eslint src/**/*.{ts,tsx} --no-error-on-unmatched-pattern"
+        "lint": "eslint src/**/*.{ts,tsx} --no-error-on-unmatched-pattern",
+        "typecheck": "tsc -p tsconfig.json"
     },
     "eslintConfig": {
         "extends": "react-app"
     },
     "husky": {
         "hooks": {
-            "pre-commit": "yarn lint --max-warnings=0"
+            "pre-commit": "yarn lint --max-warnings=0 && yarn typecheck"
         }
     },
     "browserslist": {
