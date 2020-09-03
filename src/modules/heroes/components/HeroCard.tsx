@@ -3,6 +3,8 @@ import styled from 'styled-components';
 
 import { mediaQueries } from 'config/variables';
 
+import { Powerstat, Powerstats } from './shared';
+
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
@@ -22,28 +24,6 @@ const Wrapper = styled.div`
 
 const Image = styled.img`
     height: 15rem;
-`;
-
-const Powerstats = styled.div`
-    display: grid;
-    grid-gap: 1rem;
-    margin: 2rem 0;
-
-    ${mediaQueries.sm} {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    ${mediaQueries.md} {
-        grid-template-columns: 1fr;
-    }
-
-    ${mediaQueries.lg} {
-        grid-template-columns: 1fr 1fr;
-    }
-`;
-
-const Powerstat = styled.p`
-    margin: 0;
 `;
 
 export const HeroCard = () => (
