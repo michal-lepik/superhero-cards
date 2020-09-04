@@ -22,4 +22,5 @@ export const Powerstats = styled.div`
 
 export const Powerstat = styled.p`
     margin: 0;
+    text-transform: capitalize;
 `;

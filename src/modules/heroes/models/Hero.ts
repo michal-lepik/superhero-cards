@@ -1,11 +1,18 @@
+export enum HeroResponse {
+    Error = 'error',
+    Success = 'success',
+}
+
 export interface Hero {
     id: number;
     name: string;
+    response: HeroResponse;
     powerstats: Powerstats;
     appearance: Appearance;
+    image: Image;
 }
 
-export interface Powerstats {
+interface Powerstats {
     intelligence: number;
     strength: number;
     speed: number;
@@ -14,11 +21,15 @@ export interface Powerstats {
     combat: number;
 }
 
-export interface Appearance {
+interface Appearance {
     gender: string;
     race: string;
     height: string[];
     weight: string[];
     eyeColor: string;
     hairColor: string;
+}
+
+interface Image {
+    url: string;
 }
