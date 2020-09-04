@@ -1,4 +1,4 @@
-import { filter, pluck, switchMap, catchError, map } from 'rxjs/operators';
+import { filter, pluck, switchMap, catchError, map, debounceTime } from 'rxjs/operators';
 import { isActionOf } from 'typesafe-actions';
 import { of } from 'rxjs';
 import { combineEpics } from 'redux-observable';
@@ -9,7 +9,7 @@ import * as actions from './actions';
 import { HeroesService } from './services';
 
 export const heroesEpicFactory = (heroesService: HeroesService): Epic => {
-    const getHero: Epic = action$ =>
+    const getHeroEpic: Epic = action$ =>
         action$.pipe(
             filter(isActionOf(actions.getHeroAsync.request)),
             pluck('payload'),
@@ -21,5 +21,18 @@ export const heroesEpicFactory = (heroesService: HeroesService): Epic => {
             ),
         );
 
-    return combineEpics(getHero);
+    const searchHeroesEpic: Epic = action$ =>
+        action$.pipe(
+            filter(isActionOf(actions.searchHeroesAsync.request)),
+            debounceTime(500),
+            pluck('payload'),
+            switchMap(name =>
+                heroesService.searchHero(name).pipe(
+                    map(actions.searchHeroesAsync.success),
+                    catchError((err: HttpError) => of(actions.searchHeroesAsync.failure(err))),
+                ),
+            ),
+        );
+
+    return combineEpics(getHeroEpic, searchHeroesEpic);
 };
