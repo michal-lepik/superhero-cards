@@ -12,7 +12,7 @@ const Wrapper = styled.main`
 
 const Details = styled.div`
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     margin-top: 2rem;
 
     ${mediaQueries.md} {
@@ -26,7 +26,7 @@ const Image = styled.img`
     height: 20rem;
 
     ${mediaQueries.md} {
-        margin-right: 3rem;
+        margin-left: 3rem;
     }
 `;
 
@@ -46,7 +46,6 @@ export const HeroDetails: React.FC<Props> = ({ hero }) => (
     <Wrapper>
         <h2>{hero.name}</h2>
         <Details>
-            <Image src={hero.image.url} alt={`picture of ${hero.name}`} />
             <div>
                 <p>
                     Gender: <b>{hero.appearance.gender}</b>
@@ -75,6 +74,7 @@ export const HeroDetails: React.FC<Props> = ({ hero }) => (
                     ))}
                 </Powerstats>
             </div>
+            <Image src={hero.image.url} alt={`picture of ${hero.name}`} />
         </Details>
     </Wrapper>
 );
