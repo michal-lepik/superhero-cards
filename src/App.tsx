@@ -1,6 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { Provider } from 'react-redux';
 import { createGlobalStyle } from 'styled-components';
+
+import { store } from 'core/store';
 
 import { Header } from 'common/components/Header';
 import { HeroDetailsContainer } from 'modules/heroes/containers/HeroDetailsContainer';
@@ -19,18 +22,20 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 export const App = () => (
-    <BrowserRouter>
-        <GlobalStyle />
-        <Header />
+    <Provider store={store}>
+        <BrowserRouter>
+            <GlobalStyle />
+            <Header />
 
-        <Switch>
-            <Route path="/" exact>
-                <HeroSelectContainer />
-            </Route>
-            <Route path="/hero/:heroId" exact>
-                <HeroDetailsContainer />
-            </Route>
-            <Redirect to="/" />
-        </Switch>
-    </BrowserRouter>
+            <Switch>
+                <Route path="/" exact>
+                    <HeroSelectContainer />
+                </Route>
+                <Route path="/hero/:heroId" exact>
+                    <HeroDetailsContainer />
+                </Route>
+                <Redirect to="/" />
+            </Switch>
+        </BrowserRouter>
+    </Provider>
 );
