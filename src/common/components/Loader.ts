@@ -14,7 +14,8 @@ interface Props {
 }
 
 export const Loader = styled.div`
-    margin: 10rem auto;
+    margin: auto;
+    margin-top: ${(props: Props) => (props.small ? '1rem' : '10rem')};
     animation: ${rotate360} 1s linear infinite;
     transform: translateZ(0);
 
