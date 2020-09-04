@@ -7,7 +7,7 @@ import { Hero } from './models/Hero';
 
 export interface HeroesState {
     isFetching: boolean;
-    hero?: Hero;
+    selectedHero?: Hero;
 }
 
 export const defaultHeroesState: HeroesState = {
@@ -19,6 +19,6 @@ export const heroesReducer = createReducer<HeroesState, AppAction>(defaultHeroes
     .handleAction(actions.getHeroAsync.success, (state, action) => ({
         ...state,
         isFetching: false,
-        hero: action.payload,
+        selectedHero: action.payload,
     }))
     .handleAction(actions.getHeroAsync.failure, state => ({ ...state, isFetching: false }));

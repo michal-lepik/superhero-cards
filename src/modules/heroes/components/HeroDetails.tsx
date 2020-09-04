@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { mediaQueries } from 'config/variables';
 
 import { Powerstat, Powerstats as _Powerstats } from './shared';
+import { Hero } from '../models/Hero';
 
 const Wrapper = styled.main`
     padding: 1rem 2rem;
@@ -37,50 +38,41 @@ const Powerstats = styled(_Powerstats)`
     }
 `;
 
-export const HeroDetails = () => (
+interface Props {
+    hero: Hero;
+}
+
+export const HeroDetails: React.FC<Props> = ({ hero }) => (
     <Wrapper>
-        <h2>Hero name</h2>
+        <h2>{hero.name}</h2>
         <Details>
-            <Image src="https://www.superherodb.com/pictures2/portraits/10/100/791.jpg" />
+            <Image src={hero.image.url} alt={`picture of ${hero.name}`} />
             <div>
                 <p>
-                    Gender: <b>Male</b>
+                    Gender: <b>{hero.appearance.gender}</b>
                 </p>
                 <p>
-                    Race: <b>Human</b>
+                    Race: <b>{hero.appearance.race}</b>
                 </p>
                 <p>
-                    Height: <b>191 cm</b>
+                    Height: <b>{hero.appearance.height[1]}</b>
                 </p>
                 <p>
-                    Weight: <b>101 kg</b>
+                    Weight: <b>{hero.appearance.weight[1]}</b>
                 </p>
                 <p>
-                    Eye color: <b>Blue</b>
+                    Eye color: <b>{hero.appearance.eyeColor}</b>
                 </p>
                 <p>
-                    Hair color: <b>Black</b>
+                    Hair color: <b>{hero.appearance.hairColor}</b>
                 </p>
 
                 <Powerstats>
-                    <Powerstat>
-                        intelligence: <b>10</b>
-                    </Powerstat>
-                    <Powerstat>
-                        intelligence: <b>20</b>
-                    </Powerstat>
-                    <Powerstat>
-                        intelligence: <b>30</b>
-                    </Powerstat>
-                    <Powerstat>
-                        intelligence: <b>40</b>
-                    </Powerstat>
-                    <Powerstat>
-                        intelligence: <b>50</b>
-                    </Powerstat>
-                    <Powerstat>
-                        intelligence: <b>60</b>
-                    </Powerstat>
+                    {Object.entries(hero.powerstats).map(([name, value]) => (
+                        <Powerstat key={name}>
+                            {name}: <b>{value}</b>
+                        </Powerstat>
+                    ))}
                 </Powerstats>
             </div>
         </Details>
