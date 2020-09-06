@@ -1,12 +1,14 @@
 import {
+    catchError,
+    debounceTime,
     filter,
+    flatMap,
+    map,
+    mergeMap,
     pluck,
     switchMap,
-    catchError,
-    map,
-    debounceTime,
-    mergeMap,
     takeUntil,
+    startWith,
 } from 'rxjs/operators';
 import { isActionOf } from 'typesafe-actions';
 import { of, interval } from 'rxjs';
@@ -50,15 +52,20 @@ export const heroesEpicFactory = (heroesService: HeroesService): Epic => {
         return action$.pipe(
             filter(isActionOf(actions.startRandomHeroes)),
             switchMap(() =>
-                interval(1000).pipe(
+                interval(1000 * 15).pipe(
+                    startWith(0),
                     takeUntil(stopRandom$),
                     mergeMap(() =>
                         getRandomIdArray().map(heroId =>
-                            heroesService.getHero(heroId).pipe(map(actions.getRandomHero)),
+                            heroesService.getHero(heroId).pipe(
+                                map(actions.getRandomHero),
+                                catchError((err: HttpError) => of(actions.getHeroAsync.failure(err))),
+                            ),
                         ),
                     ),
                 ),
             ),
+            flatMap(value => value),
         );
     };
 
