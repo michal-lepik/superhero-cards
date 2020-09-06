@@ -26,6 +26,15 @@ const Image = styled.img`
     height: 15rem;
 `;
 
+const mockedPowerstats = {
+    intelligence: '81',
+    strength: '40',
+    speed: '29',
+    durability: '55',
+    power: '63',
+    combat: '90',
+};
+
 export const HeroCard = () => (
     <Wrapper>
         <h2>Superhero Name</h2>
@@ -34,24 +43,11 @@ export const HeroCard = () => (
             alt="picture of name"
         />
         <Powerstats>
-            <Powerstat>
-                intelligence: <b>10</b>
-            </Powerstat>
-            <Powerstat>
-                intelligence: <b>20</b>
-            </Powerstat>
-            <Powerstat>
-                intelligence: <b>30</b>
-            </Powerstat>
-            <Powerstat>
-                intelligence: <b>40</b>
-            </Powerstat>
-            <Powerstat>
-                intelligence: <b>50</b>
-            </Powerstat>
-            <Powerstat>
-                intelligence: <b>60</b>
-            </Powerstat>
+            {Object.entries(mockedPowerstats).map(([name, value]) => (
+                <Powerstat key={name}>
+                    {name}: <b>{value}</b>
+                </Powerstat>
+            ))}
         </Powerstats>
     </Wrapper>
 );
