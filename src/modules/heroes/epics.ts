@@ -1,12 +1,22 @@
-import { filter, pluck, switchMap, catchError, map, debounceTime } from 'rxjs/operators';
+import {
+    filter,
+    pluck,
+    switchMap,
+    catchError,
+    map,
+    debounceTime,
+    mergeMap,
+    takeUntil,
+} from 'rxjs/operators';
 import { isActionOf } from 'typesafe-actions';
-import { of } from 'rxjs';
+import { of, interval } from 'rxjs';
 import { combineEpics } from 'redux-observable';
 
 import { Epic } from 'common/models/epicModel';
 import { HttpError } from 'common/models/HttpError';
 import * as actions from './actions';
 import { HeroesService } from './services';
+import { getRandomIdArray } from 'common/helpers/getRandomHeroId';
 
 export const heroesEpicFactory = (heroesService: HeroesService): Epic => {
     const getHeroEpic: Epic = action$ =>
@@ -34,5 +44,23 @@ export const heroesEpicFactory = (heroesService: HeroesService): Epic => {
             ),
         );
 
-    return combineEpics(getHeroEpic, searchHeroesEpic);
+    const randomHeroesEpic: Epic = action$ => {
+        const stopRandom$ = action$.pipe(filter(isActionOf(actions.stopRandomHeroes)));
+
+        return action$.pipe(
+            filter(isActionOf(actions.startRandomHeroes)),
+            switchMap(() =>
+                interval(1000).pipe(
+                    takeUntil(stopRandom$),
+                    mergeMap(() =>
+                        getRandomIdArray().map(heroId =>
+                            heroesService.getHero(heroId).pipe(map(actions.getRandomHero)),
+                        ),
+                    ),
+                ),
+            ),
+        );
+    };
+
+    return combineEpics(getHeroEpic, searchHeroesEpic, randomHeroesEpic);
 };

@@ -18,3 +18,5 @@ export const mediaQueries = {
     xl: mediaQ(1200),
     xxl: mediaQ(1440),
 };
+
+export const heroesIds = 731;
