@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { mediaQueries } from 'config/variables';
 
 import { Powerstat, Powerstats } from './shared';
+import { Hero } from '../models/Hero';
 
 const Wrapper = styled.div`
     display: flex;
@@ -26,24 +27,17 @@ const Image = styled.img`
     height: 15rem;
 `;
 
-const mockedPowerstats = {
-    intelligence: '81',
-    strength: '40',
-    speed: '29',
-    durability: '55',
-    power: '63',
-    combat: '90',
-};
+interface Props {
+    hero: Hero;
+}
 
-export const HeroCard = () => (
+export const HeroCard: React.FC<Props> = ({ hero }) => (
     <Wrapper>
-        <h2>Superhero Name</h2>
-        <Image
-            src="https://www.superherodb.com/pictures2/portraits/10/100/639.jpg"
-            alt="picture of name"
-        />
+        <h2>{hero.name}</h2>
+        <Image src={hero.image.url} alt={`picture of ${hero.name}`} />
+
         <Powerstats>
-            {Object.entries(mockedPowerstats).map(([name, value]) => (
+            {Object.entries(hero.powerstats).map(([name, value]) => (
                 <Powerstat key={name}>
                     {name}: <b>{value}</b>
                 </Powerstat>

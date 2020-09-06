@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import * as actions from '../actions';
-import { getIsSearching, getSearchedHeroes } from '../selectors';
+import { getIsSearching, getSearchedHeroes, getRandomHeroes } from '../selectors';
 
 import { HeroesCards } from 'modules/heroes/components/HeroesCards';
 import { HeroSearch } from 'modules/heroes/components/HeroSearch';
@@ -13,12 +13,18 @@ type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 const HeroSelect: React.FC<Props> = ({
     isSearching,
     searchedHeroes,
+    randomHeroes,
     searchHeroesRequestAction,
     startRandomHeroesAction,
+    stopRandomHeroesAction,
 }) => {
     React.useEffect(() => {
         startRandomHeroesAction();
-    }, [startRandomHeroesAction]);
+
+        return () => {
+            stopRandomHeroesAction();
+        };
+    }, [startRandomHeroesAction, stopRandomHeroesAction]);
 
     return (
         <main>
@@ -27,7 +33,7 @@ const HeroSelect: React.FC<Props> = ({
                 searchHeroes={searchHeroesRequestAction}
                 searchedHeroes={searchedHeroes}
             />
-            <HeroesCards />
+            <HeroesCards heroes={randomHeroes} />
         </main>
     );
 };
@@ -35,12 +41,14 @@ const HeroSelect: React.FC<Props> = ({
 const mapStateToProps = createSelector(
     getIsSearching,
     getSearchedHeroes,
-    (isSearching, searchedHeroes) => ({ isSearching, searchedHeroes }),
+    getRandomHeroes,
+    (isSearching, searchedHeroes, randomHeroes) => ({ isSearching, searchedHeroes, randomHeroes }),
 );
 
 const mapDispatchToProps = {
     searchHeroesRequestAction: actions.searchHeroesAsync.request,
     startRandomHeroesAction: actions.startRandomHeroes,
+    stopRandomHeroesAction: actions.stopRandomHeroes,
 };
 
 export const HeroSelectContainer = connect(mapStateToProps, mapDispatchToProps)(HeroSelect);
