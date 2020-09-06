@@ -5,17 +5,20 @@ import { AppAction } from 'common/models/actionModel';
 import * as actions from './actions';
 import { Hero } from './models/Hero';
 import { SearchedHeroes } from './models/SearchedHeroes';
+import { handleNewRandomHero } from './helpers/handleNewRandomHero';
 
 export interface HeroesState {
     isFetching: boolean;
     isSearching: boolean;
     selectedHero?: Hero;
     searchedHeroes?: SearchedHeroes;
+    randomHeroes: Hero[];
 }
 
 export const defaultHeroesState: HeroesState = {
     isFetching: false,
     isSearching: false,
+    randomHeroes: [],
 };
 
 export const heroesReducer = createReducer<HeroesState, AppAction>(defaultHeroesState)
@@ -32,4 +35,8 @@ export const heroesReducer = createReducer<HeroesState, AppAction>(defaultHeroes
         isSearching: false,
         searchedHeroes: action.payload,
     }))
-    .handleAction(actions.searchHeroesAsync.failure, state => ({ ...state, isSearching: false }));
+    .handleAction(actions.searchHeroesAsync.failure, state => ({ ...state, isSearching: false }))
+    .handleAction(actions.getRandomHero, (state, action) => ({
+        ...state,
+        randomHeroes: handleNewRandomHero(action.payload, state.randomHeroes),
+    }));

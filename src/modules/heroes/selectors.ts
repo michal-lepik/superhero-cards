@@ -7,3 +7,4 @@ export const getIsFetching = createSelector(getHeroesState, state => state.isFet
 export const getSelectedHero = createSelector(getHeroesState, state => state.selectedHero);
 export const getIsSearching = createSelector(getHeroesState, state => state.isSearching);
 export const getSearchedHeroes = createSelector(getHeroesState, state => state.searchedHeroes);
+export const getRandomHeroes = createSelector(getHeroesState, state => state.randomHeroes);

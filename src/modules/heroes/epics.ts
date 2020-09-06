@@ -1,12 +1,24 @@
-import { filter, pluck, switchMap, catchError, map, debounceTime } from 'rxjs/operators';
+import {
+    catchError,
+    debounceTime,
+    filter,
+    flatMap,
+    map,
+    mergeMap,
+    pluck,
+    switchMap,
+    takeUntil,
+    startWith,
+} from 'rxjs/operators';
 import { isActionOf } from 'typesafe-actions';
-import { of } from 'rxjs';
+import { of, interval } from 'rxjs';
 import { combineEpics } from 'redux-observable';
 
 import { Epic } from 'common/models/epicModel';
 import { HttpError } from 'common/models/HttpError';
 import * as actions from './actions';
 import { HeroesService } from './services';
+import { getRandomIdArray } from 'common/helpers/getRandomHeroId';
 
 export const heroesEpicFactory = (heroesService: HeroesService): Epic => {
     const getHeroEpic: Epic = action$ =>
@@ -34,5 +46,28 @@ export const heroesEpicFactory = (heroesService: HeroesService): Epic => {
             ),
         );
 
-    return combineEpics(getHeroEpic, searchHeroesEpic);
+    const randomHeroesEpic: Epic = action$ => {
+        const stopRandom$ = action$.pipe(filter(isActionOf(actions.stopRandomHeroes)));
+
+        return action$.pipe(
+            filter(isActionOf(actions.startRandomHeroes)),
+            switchMap(() =>
+                interval(1000 * 15).pipe(
+                    startWith(0),
+                    takeUntil(stopRandom$),
+                    mergeMap(() =>
+                        getRandomIdArray().map(heroId =>
+                            heroesService.getHero(heroId).pipe(
+                                map(actions.getRandomHero),
+                                catchError((err: HttpError) => of(actions.getHeroAsync.failure(err))),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            flatMap(value => value),
+        );
+    };
+
+    return combineEpics(getHeroEpic, searchHeroesEpic, randomHeroesEpic);
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { mediaQueries } from 'config/variables';
-
+import { Hero } from '../models/Hero';
 import { HeroCard } from './HeroCard';
 
 const Wrapper = styled.div`
@@ -17,10 +17,14 @@ const Wrapper = styled.div`
     }
 `;
 
-export const HeroesCards = () => (
+interface Props {
+    heroes: Hero[];
+}
+
+export const HeroesCards: React.FC<Props> = ({ heroes }) => (
     <Wrapper>
-        {[1, 2, 3].map(x => (
-            <HeroCard key={x} />
+        {heroes.map(hero => (
+            <HeroCard key={hero.id} hero={hero} />
         ))}
     </Wrapper>
 );

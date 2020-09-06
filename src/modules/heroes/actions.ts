@@ -1,4 +1,4 @@
-import { createAsyncAction } from 'typesafe-actions';
+import { createAction, createAsyncAction } from 'typesafe-actions';
 
 import { HttpError } from 'common/models/HttpError';
 import { Hero } from './models/Hero';
@@ -15,3 +15,7 @@ export const searchHeroesAsync = createAsyncAction(
     'SEARCH_HEROES_SUCCESS',
     'SEARCH_HEROES_FAILURE',
 )<string, SearchedHeroes, HttpError>();
+
+export const startRandomHeroes = createAction('START_RANDOM_HEROES')();
+export const stopRandomHeroes = createAction('STOP_RANDOM_HEROES')();
+export const getRandomHero = createAction('GET_RANDOM_HERO')<Hero>();
