@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { mediaQueries } from 'config/variables';
@@ -34,7 +35,9 @@ interface Props {
 export const HeroCard: React.FC<Props> = ({ hero }) => (
     <Wrapper>
         <h2>{hero.name}</h2>
-        <Image src={hero.image.url} alt={`picture of ${hero.name}`} />
+        <Link to={`/hero/${hero.id}`}>
+            <Image src={hero.image.url} alt={`picture of ${hero.name}`} />
+        </Link>
 
         <Powerstats>
             {Object.entries(hero.powerstats).map(([name, value]) => (
